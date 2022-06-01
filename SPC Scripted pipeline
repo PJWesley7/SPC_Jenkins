@@ -1,0 +1,15 @@
+node('build_java_11') {
+    stage('sourcecode') {
+        git branch: 'main',  url: 'https://github.com/spring-projects/spring-petclinic.git'
+    }
+
+    stage('build a code') {
+        sh 'mvn package'
+    }   
+
+    stage('post-buildstep') {
+        archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
+        junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+    }
+
+}
